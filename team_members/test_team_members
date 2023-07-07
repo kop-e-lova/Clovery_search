@@ -456,3 +456,272 @@ def test_tm_team_ids_double():
     print(f"Response: {response}")
     print(f'Response headers: {res_headers}')
     assert status == 200
+#Параметр page
+def test_page_str():
+    #S - API - TM - 42
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                      "page": "one_page", "limit": 50})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+    response == ({'detail': [{'loc': ['body', 'page'], 'msg': 'value is not a valid integer', 'type': 'type_error.integer'}]},)
+
+def test_page_dict():
+    #S - API - TM - 42-1
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                      "page": [1], "limit": 50})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+    assert response == ({'detail': [{'loc': ['body', 'page'], 'msg': 'value is not a valid integer', 'type': 'type_error.integer'}]},)
+
+def test_page_empty():
+    #S - API - TM - 43
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                      "page": "", "limit": 50})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+    assert response == ({'detail': [{'loc': ['body', 'page'], 'msg': 'value is not a valid integer', 'type': 'type_error.integer'}]},)
+
+def test_page_negative():
+    #S - API - TM - 44
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                      "page": -1, "limit": 50})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+    assert response == ({'detail': [{'loc': ['body', 'page'], 'msg': 'ensure this value is greater than or equal to 1', 'type': 'value_error.number.not_ge', 'ctx': {'limit_value': 1}}]},)
+
+def test_page_zero():
+    #S - API - TM - 52
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                      "page": 0, "limit": 50})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+    assert response == ({'detail': [{'loc': ['body', 'page'], 'msg': 'ensure this value is greater than or equal to 1', 'type': 'value_error.number.not_ge', 'ctx': {'limit_value': 1}}]},)
+
+def test_page_10_limit_5():
+    #S - API - TM - 45
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                      "page": 10, "limit": 5})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 404
+    assert response == ({'detail': 'Nothing found on this page', 'type': 'not_found'},)
+
+#Параметр limit
+def test_limit_string():
+    #S - API - TM - 46
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                      "page": 1, "limit": "three"})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+    assert response == ({'detail': [{'loc': ['body', 'limit'], 'msg': 'value is not a valid integer', 'type': 'type_error.integer'}]},)
+
+def test_limit_list():
+    #S - API - TM - 46-1
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                      "page": 1, "limit": [50]})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+    assert response == ({'detail': [{'loc': ['body', 'limit'], 'msg': 'value is not a valid integer', 'type': 'type_error.integer'}]},)
+
+def test_limit_empty():
+    #S - API - TM - 47
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                      "page": 1, "limit": ""})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+    assert response == ({'detail': [{'loc': ['body', 'limit'], 'msg': 'value is not a valid integer', 'type': 'type_error.integer'}]},)
+
+def test_limit_negative():
+    #S - API - TM - 48
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                      "page": 1, "limit": -1})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+    assert response == ({'detail': [{'loc': ['body', 'limit'], 'msg': 'ensure this value is greater than or equal to 1', 'type': 'value_error.number.not_ge', 'ctx': {'limit_value': 1}}]},)
+
+def test_limit_zero():
+    #S - API - TM - 49
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                      "page": 1, "limit": 0})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+    assert response == ({'detail': [{'loc': ['body', 'limit'], 'msg': 'ensure this value is greater than or equal to 1', 'type': 'value_error.number.not_ge', 'ctx': {'limit_value': 1}}]},)
+
+def test_limit_51():
+    #S - API - TM - 50
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                      "page": 1, "limit": 51})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+    assert response == ({'detail': [{'loc': ['body', 'limit'], 'msg': 'ensure this value is less than or equal to 50', 'type': 'value_error.number.not_le', 'ctx': {'limit_value': 50}}]},)
+
+# проверки на параметр фильтрации поиска first_name
+def test_first_name_int():
+    #S - API - TM - 54
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                       "first_name": 1})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+
+def test_first_name_empty_str():
+    #S - API - TM - 55
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                       "first_name": ""})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+
+def test_first_name_None():
+    #S - API - TM - 56
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                       "first_name": None})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+
+def test_first_name_James():
+    #S - API - TM - 57
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                       "first_name": "James"})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+
+#Last_name
+def test_last_name_int():
+    #S - API - TM - 58
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                       "last_name": 1})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+
+def test_last_name_empty_str():
+    #S - API - TM - 59
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                       "last_name": ""})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+
+def test_last_name_None():
+    #S - API - TM - 60
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                       "last_name": None})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+
+def test_last_name_Afonina():
+    #S - API - TM - 61
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                       "last_name": "Афонина"})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+
+#Profession
+
+def test_profession_int():
+    #S - API - TM - 62
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                       "profession": 1})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+
+def test_profession_empty_str():
+    #S - API - TM - 63
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                       "profession": ""})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+
+def test_profession_None():
+    #S - API - TM - 64
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                       "profession": None})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+
+def test_profession_HR_():
+    #S - API - TM - 65
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                       "profession": "HR-специалист"})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
+
+def test_wrong_pair_first_last_name():
+    #S - API - TM - 66
+    status, response, res_headers = tm.tms(some_url=None, some_headers=None,
+                                           some_data={"team_ids": ["4ae7df2a-a5dd-4267-aaa8-093b84031883"],
+                                                      "first_name": "Иван",
+                                                      "last_name": "Лыжин",
+                                                      "profession": "Product-менеджер"})
+    print(f"\nCode: {status}")
+    print(f"Response: {response}")
+    print(f'Response headers: {res_headers}')
+    assert status == 422
